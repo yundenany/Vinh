@@ -1,0 +1,59 @@
+﻿@using BTVN_B5_4.Models
+
+@model BTVN_B5_4.Models.Book
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string searchString = Request.QueryString["searchString"];
+
+    List<Book> result = new List<Book>();
+
+}
+
+<h2>Search @searchString</h2>
+
+@{
+    if (string.IsNullOrEmpty(searchString))
+    {
+        <h3>Vui Lòng Nhập Từ Khóa</h3>
+    }
+    else
+    {
+        if (searchString == "" || searchString.Length < 3)
+        {
+            <h3>Vui Lòng Nhập Từ Khóa</h3>
+        }
+        else
+        {
+            foreach (var item in result)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p><strong>Tác giả: </strong>@item.Author</p>
+                            <p><strong>Thể loại: </strong>@item.Category.CategoryName</p>
+                            <img style="align-self:center;" alt="@item.Title"
+                                 src="~/Content/ImageBooks/@item.Image" width="125" height="150" />
+                        </div>
+                        <div class="panel-footer clearfix">
+                            <div class="pull-right">
+                                @Html.ActionLink("Xem", "Detail", "Book_User", new { id = item.Id }, new
+                                {
+                                    @class
+                                = "btn btn-default"
+                                })
+                                @Html.ActionLink("Thêm vào giỏ hàng", "AddToCart", "Book_User", new
+                                {
+                                    id = item.Id
+                                }, new { @class = "btn btn-success" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+
+}
